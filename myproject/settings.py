@@ -1,19 +1,23 @@
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# ===============================
+# Paths
+# ===============================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# ===============================
+# Security
+# ===============================
 SECRET_KEY = 'django-insecure-*n(-$g2amd)2k&!qe_=k@c8%$qzqa6+(tbanneghddsfnnvl3w'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Добавляем только домен Render
-ALLOWED_HOSTS = ['studybud-jqh0.onrender.com']
+# Render и локально
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'studybud-jqh0.onrender.com']
 
-# Application definition
+# ===============================
+# Installed Apps
+# ===============================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,13 +25,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Мои приложения
     'base',
     'rest_framework',
     'channels',
 ]
 
+# ===============================
+# Middleware
+# ===============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # WhiteNoise для статики
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -36,8 +46,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ===============================
+# URLs and WSGI/ASGI
+# ===============================
 ROOT_URLCONF = 'myproject.urls'
+WSGI_APPLICATION = 'myproject.wsgi.application'
+ASGI_APPLICATION = 'myproject.asgi.application'
 
+# ===============================
+# Templates
+# ===============================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -54,10 +72,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myproject.wsgi.application'
-ASGI_APPLICATION = 'myproject.asgi.application'
-
+# ===============================
 # Database
+# ===============================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -65,7 +82,9 @@ DATABASES = {
     }
 }
 
-# Password validation
+# ===============================
+# Password validators
+# ===============================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
@@ -73,25 +92,38 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
+# ===============================
 # Internationalization
+# ===============================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# ===============================
 # Static files (CSS, JS, Images)
+# ===============================
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # для collectstatic на Render
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# WhiteNoise: кэширование и сжатие статики
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ===============================
 # Media files
+# ===============================
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
+# ===============================
+# Default primary key
+# ===============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ===============================
 # Django REST Framework
+# ===============================
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny',],
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -100,7 +132,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Channels (WebSockets)
+# ===============================
+# Channels
+# ===============================
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
