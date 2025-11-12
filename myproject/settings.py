@@ -32,6 +32,15 @@ INSTALLED_APPS = [
     'channels',
 ]
 
+# Если будете использовать S3 для медиа-файлов, раскомментируйте
+# INSTALLED_APPS += ['storages']
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_ACCESS_KEY_ID = 'твой ключ'
+# AWS_SECRET_ACCESS_KEY = 'твой секрет'
+# AWS_STORAGE_BUCKET_NAME = 'имя бакета'
+# AWS_S3_REGION_NAME = 'регион'  # например 'eu-central-1'
+# AWS_QUERYSTRING_AUTH = False  # чтобы файлы были публично доступны
+
 # ===============================
 # Middleware
 # ===============================
@@ -104,7 +113,7 @@ USE_TZ = True
 # Static files (CSS, JS, Images)
 # ===============================
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # для collectstatic на Render
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # WhiteNoise: кэширование и сжатие статики
