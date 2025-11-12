@@ -1,0 +1,463 @@
+:root {
+  --bg-color: #f5f7fa;
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --text-color: #1e293b;
+  --light: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+  --transition: 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ========== НАВИГАЦИЯ ========== */
+header {
+  background: var(--light);
+  box-shadow: 0 2px 6px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav {
+  max-width: 1100px;
+  margin: auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+
+nav a:hover {
+  color: var(--primary);
+}
+
+/* ========== ОСНОВНОЙ КОНТЕНТ ========== */
+main {
+  flex: 1;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* ========== КАРТОЧКИ КОМНАТ ========== */
+.room-card {
+  background: var(--light);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 18px var(--shadow);
+}
+
+.room-card h3 {
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.room-card p {
+  color: #475569;
+}
+
+/* ========== КНОПКИ ========== */
+button,
+a.button {
+  background: var(--primary);
+  color: var(--light);
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background var(--transition), transform var(--transition);
+}
+
+button:hover,
+a.button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+a.button-secondary {
+  background: #94a3b8;
+}
+
+a.button-secondary:hover {
+  background: #64748b;
+}
+
+/* ========== ФОРМЫ ========== */
+form {
+  background: var(--light);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px var(--shadow);
+  padding: 25px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius);
+  margin-bottom: 15px;
+  transition: border var(--transition), box-shadow var(--transition);
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+}
+
+/* ========== СООБЩЕНИЯ В КОМНАТЕ ========== */
+.message {
+  background: var(--light);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 4px var(--shadow);
+  padding: 15px;
+  margin-bottom: 12px;
+  animation: fadeIn 0.4s ease;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #475569;
+}
+
+.message-body {
+  margin-top: 8px;
+  color: #1e293b;
+}
+
+/* ========== ПОДВАЛ ========== */
+footer {
+  background: var(--light);
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 -2px 6px var(--shadow);
+  color: #475569;
+}
+
+/* ========== АНИМАЦИИ ========== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== АДАПТИВНОСТЬ ========== */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav a {
+    margin: 8px 0;
+  }
+
+  form {
+    width: 100%;
+  }
+}
+/* Контейнер комнаты */
+.room-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #ffffffdd;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.6s ease;
+}
+
+/* Заголовок */
+.room-title {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Описание комнаты */
+.room-description {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* Контейнер сообщений */
+#messages-container {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+/* Отдельное сообщение */
+.message {
+  display: flex; /* делаем флекс-контейнером */
+  justify-content: space-between; /* размещаем текст слева, кнопку справа */
+  align-items: center; /* вертикальное выравнивание по центру */
+  padding: 10px;
+  background: #e9f6ff;
+  border-left: 4px solid #3498db;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Анимация появления нового сообщения */
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Форма отправки */
+#message-form {
+  display: flex;
+  gap: 10px;
+}
+
+/* Поле ввода */
+#message-input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+}
+
+#message-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 5px #3498db77;
+}
+
+/* Кнопка */
+#message-form button {
+  padding: 10px 18px;
+  background: #3498db;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+#message-form button:hover {
+  background: #217dbb;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.unread-counter {
+  background: #ef4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 15px;
+}
+.message {
+  display: flex;
+  justify-content: space-between; /* текст слева, кнопка справа */
+  align-items: center; /* вертикальное выравнивание по центру */
+  padding: 10px;
+  background: #e9f6ff;
+  border-left: 4px solid #3498db;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.message .delete-btn {
+  display: inline-block;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s;
+  opacity: 0; /* изначально скрыта */
+}
+
+.message:hover .delete-btn {
+  opacity: 1; /* показывается при наведении */
+}
+
+.message .delete-btn:hover {
+  background: #b91c1c;
+  transform: scale(1.05);
+}
+.activity-container {
+  max-width: 700px;
+  margin: 30px auto;
+}
+
+.activity-message {
+  padding: 12px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-message a {
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.unread-counter {
+  background: #ef4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 12px;
+}
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 50px auto;
+}
+
+/* Левая колонка */
+.profile-left {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+}
+
+/* Большой аватар */
+.avatar-large {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+/* Биография */
+.bio {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Правая колонка */
+.profile-right {
+  flex: 2;
+  min-width: 400px;
+}
+
+/* Списки */
+.room-list,
+.message-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.room-list li,
+.message-list li {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: background 0.3s ease;
+}
+
+.room-list li:hover,
+.message-list li:hover {
+  background: #e9f6ff;
+}
+
+/* Время сообщения */
+.message-time {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+}
+.update-profile-container {
+  max-width: 500px;
+  margin: 50px auto;
+  background: #ffffffdd;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.update-profile-container form input,
+.update-profile-container form textarea {
+  margin-bottom: 15px;
+}
