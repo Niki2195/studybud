@@ -1,0 +1,9 @@
+{% extends 'base/main.html' %} {% block content %}
+<div class="update-profile-container">
+  <h2>Редактирование профиля</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {{ user_form.as_p }} {{ profile_form.as_p }}
+    <button type="submit">Сохранить</button>
+  </form>
+</div>
+{% endblock %}

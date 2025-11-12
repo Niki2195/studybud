@@ -1,0 +1,83 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<!-- Заголовок страницы -->
+<h1 style="text-align: center; margin-bottom: 15px">
+  Добро пожаловать на
+  <span style="color: var(--primary)">практику Django с Nicat!</span>
+</h1>
+<p style="text-align: center; color: #475569; margin-bottom: 30px">
+  Здесь отображаются <strong>все комнаты</strong>, созданные пользователями.
+</p>
+
+<!-- Форма поиска -->
+<form method="GET" action="" style="max-width: 500px; margin: 0 auto 30px auto; display: flex; gap: 10px">
+  <input
+    type="text"
+    name="q"
+    placeholder="🔍 Поиск комнаты..."
+    value="{{ q }}"
+    style="flex: 1; border-radius: var(--radius); padding: 10px; border: 1px solid #cbd5e1;"
+  />
+  <select name="filter_by" style="border-radius: var(--radius); padding: 10px; border: 1px solid #cbd5e1;">
+    <option value="">Без фильтра</option>
+    <option value="recent" {% if filter_by == 'recent' %}selected{% endif %}>Последние обновления</option>
+    <option value="topic" {% if filter_by == 'topic' %}selected{% endif %}>По теме</option>
+  </select>
+  <button type="submit" class="button">Поиск</button>
+</form>
+
+<!-- Темы -->
+<section style="margin-bottom: 40px">
+  <h2>Темы</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px">
+    <a href="{% url 'home' %}" class="button button-secondary">Все</a>
+    {% for topic in topics %}
+      <a href="{% url 'home' %}?q={{ topic.name }}" class="button button-secondary">{{ topic.name }}</a>
+    {% empty %}
+      <p>Тем пока нет.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Список комнат -->
+<section>
+  <h2 style="margin-bottom: 15px">Комнаты</h2>
+
+  {% if request.user.is_authenticated %}
+    <a href="{% url 'createRoom' %}" class="button" style="margin-bottom: 20px; display: inline-block">
+      ➕ Создать комнату
+    </a>
+  {% endif %}
+
+  {% if rooms %}
+    {% for room in rooms %}
+      <div class="room-card">
+        <h3>
+          <a href="{% url 'room_detail' room.id %}" style="color: var(--primary); text-decoration: none;">
+            {{ room.name }}
+          </a>
+        </h3>
+
+        {% if room.description %}
+          <p>{{ room.description }}</p>
+        {% endif %}
+
+        <p style="font-size: 14px; color: #64748b">
+          Автор: <strong>{{ room.host.username }}</strong> | Тема: <em>{{ room.topic.name }}</em>
+        </p>
+
+        {% if request.user == room.host %}
+          <div style="margin-top: 10px">
+            <a href="{% url 'updateRoom' room.id %}" class="button">Редактировать</a>
+            <a href="{% url 'deleteRoom' room.id %}" class="button button-secondary">Удалить</a>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p style="text-align: center; color: #64748b">Пока нет созданных комнат.</p>
+  {% endif %}
+</section>
+
+{% endblock content %}

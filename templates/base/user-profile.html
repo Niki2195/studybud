@@ -1,0 +1,63 @@
+{% extends 'base/main.html' %} {% block content %}
+<div class="profile-container">
+  <!-- Левая колонка: аватар и личная информация -->
+  <div class="profile-left">
+    <!-- Аватар -->
+    <img
+      src="{{ user.profile.avatar.url }}"
+      alt="{{ user.username }}"
+      class="avatar-large"
+    />
+
+    <!-- Имя пользователя -->
+    <h2>{{ user.username }}</h2>
+
+    <!-- Биография -->
+    {% if user.profile.bio %}
+    <p class="bio">{{ user.profile.bio }}</p>
+    {% else %}
+    <p class="bio">Биография не указана</p>
+    {% endif %}
+
+    <!-- Ссылка на редактирование профиля (если это текущий пользователь) -->
+    {% if request.user == user %}
+    <a href="{% url 'updateProfile' %}" class="button">Редактировать профиль</a>
+    {% endif %}
+  </div>
+
+  <!-- Правая колонка: комнаты и сообщения -->
+  <div class="profile-right">
+    <h3>Комнаты пользователя</h3>
+    {% if rooms %}
+    <ul class="room-list">
+      {% for room in rooms %}
+      <li>
+        <a href="{% url 'room_detail' room.id %}">{{ room.name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Пользователь не создал ни одной комнаты</p>
+    {% endif %}
+
+    <h3>Сообщения пользователя</h3>
+    {% if user_messages %}
+    <ul class="message-list">
+      {% for msg in user_messages %}
+      <li>
+        <strong
+          >В комнате
+          <a href="{% url 'room_detail' msg.room.id %}">{{ msg.room.name }}</a
+          >:</strong
+        >
+        {{ msg.body }}
+        <span class="message-time">{{ msg.created|date:"d.m.Y H:i" }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Пользователь не отправил ни одного сообщения</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

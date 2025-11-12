@@ -1,0 +1,16 @@
+{% extends 'base/main.html' %} {% block content %}
+<h2>
+  Вы уверены, что хотите удалить "{{ obj.name|default:obj.description }}"?
+</h2>
+
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Да, удалить</button>
+
+  <!-- Если объект имеет room (сообщение), ссылка ведет в комнату, иначе на главную -->
+  <a
+    href="{% if obj.room %}{% url 'room_detail' obj.room.id %}{% else %}{% url 'home' %}{% endif %}"
+    >Отмена</a
+  >
+</form>
+{% endblock content %}

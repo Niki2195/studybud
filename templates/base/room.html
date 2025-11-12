@@ -1,0 +1,165 @@
+{% extends 'base/main.html' %} {% block content %}
+<div class="room-container">
+  <h2 class="room-title">{{ room.name }}</h2>
+  <p class="room-description">{{ room.description }}</p>
+
+  <div
+    id="notification"
+    style="
+      display: none;
+      background: #fffae6;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #333;
+    "
+  ></div>
+
+  <h3>Участники:</h3>
+  <ul>
+    {% for user in room.participants.all %}
+    <li><a href="{% url 'user-profile' user.id %}">{{ user.username }}</a></li>
+    {% empty %}
+    <li>Пока нет участников</li>
+    {% endfor %}
+  </ul>
+
+  <hr />
+
+  <div id="messages-container">
+    {% for message in room.message_set.all %}
+    <div class="message" data-id="{{ message.id }}">
+      <span>
+        <img
+          src="{{ message.user.profile.avatar.url }}"
+          class="avatar"
+          alt="{{ message.user.username }}"
+        />
+        <strong>{{ message.user.username }}:</strong> {{ message.body }}
+      </span>
+      {% if request.user == message.user %}
+      <button class="delete-btn" data-id="{{ message.id }}">Удалить</button>
+      {% endif %}
+    </div>
+    {% empty %}
+    <p>Пока нет сообщений</p>
+    {% endfor %}
+  </div>
+
+  <form id="message-form">
+    <input
+      type="text"
+      id="message-input"
+      placeholder="Введите сообщение..."
+      required
+    />
+    <button type="submit">Отправить</button>
+  </form>
+</div>
+
+<script type="text/javascript">
+  const roomName = "{{ room.name }}";
+  const username = "{{ request.user.username }}";
+  const avatarUrl = "{{ request.user.profile.avatar.url }}";
+  const csrfToken = "{{ csrf_token }}";
+
+  const messagesContainer = document.getElementById("messages-container");
+  const input = document.getElementById("message-input");
+  const form = document.getElementById("message-form");
+  const notification = document.getElementById("notification");
+
+  let existingMessageIds = Array.from(
+    messagesContainer.querySelectorAll(".message")
+  ).map((m) => parseInt(m.dataset.id));
+
+  function addMessage(id, user, avatar, body, isOwn) {
+    if (existingMessageIds.includes(id)) return;
+    existingMessageIds.push(id);
+
+    const div = document.createElement("div");
+    div.classList.add("message");
+    div.dataset.id = id;
+    div.innerHTML = `
+      <span>
+        <img src="${avatar}" class="avatar" alt="${user}">
+        <strong>${user}:</strong> ${body}
+      </span>
+    `;
+    if (isOwn) {
+      const btn = document.createElement("button");
+      btn.className = "delete-btn";
+      btn.dataset.id = id;
+      btn.innerText = "Удалить";
+      div.appendChild(btn);
+      btn.addEventListener("click", deleteMessage);
+    } else {
+      div.style.background = "#fff8c5";
+      setTimeout(() => (div.style.background = "#e9f6ff"), 3000);
+
+      notification.innerText = `Новое сообщение от ${user}`;
+      notification.style.display = "block";
+      setTimeout(() => (notification.style.display = "none"), 4000);
+    }
+
+    messagesContainer.appendChild(div);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  async function deleteMessage(e) {
+    const id = e.target.dataset.id;
+    try {
+      const res = await fetch(`/delete-message/${id}/`, {
+        method: "POST",
+        headers: { "X-CSRFToken": csrfToken },
+      });
+      if (res.ok) {
+        const msg = messagesContainer.querySelector(
+          `.message[data-id='${id}']`
+        );
+        if (msg) msg.remove();
+        existingMessageIds = existingMessageIds.filter(
+          (i) => i !== parseInt(id)
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  document
+    .querySelectorAll(".delete-btn")
+    .forEach((btn) => btn.addEventListener("click", deleteMessage));
+
+  const chatSocket = new WebSocket(
+    `ws://${window.location.host}/ws/chat/${roomName}/`
+  );
+
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const isOwn = data.user === username;
+    const avatar = data.user_avatar || "/media/avatars/default.png";
+    addMessage(data.id, data.user, avatar, data.body, isOwn);
+  };
+
+  chatSocket.onclose = function (e) {
+    console.error("Chat socket closed unexpectedly");
+  };
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const body = input.value.trim();
+    if (!body) return;
+
+    chatSocket.send(
+      JSON.stringify({
+        message: body,
+        user: username,
+        user_avatar: avatarUrl,
+      })
+    );
+
+    input.value = "";
+  });
+</script>
+{% endblock %}

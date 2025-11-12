@@ -1,0 +1,21 @@
+{% extends 'base/main.html' %} {% load custom_filters %} {% block content %}
+<h2>Лента активности</h2>
+
+<div class="activity-container">
+  {% for message in messages %}
+  <div class="activity-message">
+    <a href="{% url 'room_detail' message.room.id %}">
+      <strong>{{ message.user.username }}</strong> в комнате
+      <em>{{ message.room.name }}</em>:
+    </a>
+    {{ message.body }} {% if unread_count_by_room|get_item:message.room.id %}
+    <span class="unread-counter"
+      >{{ unread_count_by_room|get_item:message.room.id }}</span
+    >
+    {% endif %}
+  </div>
+  {% empty %}
+  <p>Нет сообщений</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base/main.html' %} {%block content %}
+<h1>{{ room.name }}</h1>
+<p>{{ room.description }}</p>
+
+<hr />
+
+<!-- Список сообщений -->
+<div>
+  {% for message in messages %}
+  <p><strong>{{ message.user.username }}:</strong> {{ message.body }}</p>
+  {% empty %}
+  <p>Пока нет сообщений...</p>
+  {% endfor %}
+</div>
+
+<hr />
+
+<!-- Форма для отправки сообщения -->
+<form method="POST">
+  {% csrf_token %} {{ form.as_p }}
+  <button id="btn" type="submit">Отправить</button>
+</form>
+{% endblock content %}
