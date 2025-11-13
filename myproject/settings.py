@@ -10,9 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 # ===============================
 SECRET_KEY = 'django-insecure-*n(-$g2amd)2k&!qe_=k@c8%$qzqa6+(tbanneghddsfnnvl3w'
-DEBUG = False
+DEBUG = True  # На локалке True, на продакшне ставим False
 
-# Render и локально
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'studybud-jqh0.onrender.com']
 
 # ===============================
@@ -31,15 +30,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'channels',
 ]
-
-# Если будете использовать S3 для медиа-файлов, раскомментируйте
-# INSTALLED_APPS += ['storages']
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# AWS_ACCESS_KEY_ID = 'твой ключ'
-# AWS_SECRET_ACCESS_KEY = 'твой секрет'
-# AWS_STORAGE_BUCKET_NAME = 'имя бакета'
-# AWS_S3_REGION_NAME = 'регион'  # например 'eu-central-1'
-# AWS_QUERYSTRING_AUTH = False  # чтобы файлы были публично доступны
 
 # ===============================
 # Middleware
@@ -110,13 +100,11 @@ USE_I18N = True
 USE_TZ = True
 
 # ===============================
-# Static files (CSS, JS, Images)
+# Static files
 # ===============================
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # для collectstatic на Render
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# WhiteNoise: кэширование и сжатие статики
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ===============================
@@ -146,6 +134,16 @@ REST_FRAMEWORK = {
 # ===============================
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # Только для локалки
     },
 }
+
+# Для продакшна (Render) можно подключить Redis:
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("redis://localhost:6379/0")],
+#         },
+#     },
+# }
