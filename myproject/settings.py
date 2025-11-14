@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 # ===============================
 SECRET_KEY = 'django-insecure-*n(-$g2amd)2k&!qe_=k@c8%$qzqa6+(tbanneghddsfnnvl3w'
-DEBUG = True  # На локалке True, на продакшне ставим False
+DEBUG = True  
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'studybud-jqh0.onrender.com']
 
