@@ -13,7 +13,7 @@ from django.http import HttpResponse
 def home(request):
     # получаем GET‑параметр «q» (запрос поиска)
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
-    # получаем GET‑параметр «filter_by», например «recent» или «topic»
+    # получаем GET‑параметр «filter_by»
     filter_by = request.GET.get('filter_by')  # может быть None
 
     # базовый QuerySet — все комнаты с предзагрузкой темы и хоста для оптимизации
@@ -35,7 +35,7 @@ def home(request):
     elif filter_by == 'topic':
         # пример: только комнаты с темой, оставляем только те, у которых тема не null
         rooms = rooms.filter(topic__isnull=False).order_by('topic__name')
-    # можно добавить ещё фильтры, например «most_messages», и т.д.
+   
 
     # темы — для отображения на странице, как фильтр‑список
     topics = Topic.objects.all()
