@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, filters
 from .models import Room, Message
 from .serializers import RoomSerializer, MessageSerializer
 
-# ViewSet для Room — оставляем как было
+# ViewSet для Room
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all().order_by('-updated')
     serializer_class = RoomSerializer
@@ -12,7 +12,7 @@ class RoomViewSet(viewsets.ModelViewSet):
         serializer.save(host=self.request.user)
 
 
-# ViewSet для Message — исправленный
+# ViewSet для Message
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all().order_by('created')
     serializer_class = MessageSerializer
